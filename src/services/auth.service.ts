@@ -11,12 +11,22 @@ class AuthService{
         return firebase.auth().signInWithRedirect(firebaseService.googleAuthProvider);
     }
 
-    onAuthStateChanged(fnUserChange:(user:firebase.User)=>any){
-        return firebase.auth().onAuthStateChanged(fnUserChange);
+    getAuthState(){
+        return new Promise<firebase.User>((resolve)=>{
+            let unsubscribe = firebase.auth()
+                    .onAuthStateChanged(user=>{
+                        resolve(user);
+                        unsubscribe();
+                    });
+        });
     }
 
     getUser(){
         return firebase.auth().currentUser;
+    }
+
+    getRedirectResult(){
+        return firebase.auth().getRedirectResult();
     }
 }
 

@@ -1,11 +1,11 @@
 import { ReduxAction, ActionTypes } from "./actions";
 import { combineReducers } from "redux";
 
-export interface AppState {
+export interface StoreState {
   user: firebase.User
 }
 
-const initialState: AppState = {
+const initialState: StoreState = {
   user: null
 }
 

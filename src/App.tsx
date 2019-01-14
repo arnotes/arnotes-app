@@ -4,31 +4,38 @@ import logo from './logo.svg';
 import './App.scss';
 import AuthLogin from './components/auth-login.component';
 import { authService } from './services/auth.service';
-import { AppState } from './redux/reducers';
+import { StoreState } from './redux/reducers';
 import { store } from './redux';
 import { setUser } from './redux/actions';
 import Navbar from './components/navbar.component';
 
 interface AppProps {
-  currentUser?: firebase.User;
+  user?: firebase.User;
 }
 
-class App extends Component<AppProps, any> {
+interface AppState{
+  appReady: boolean
+}
+
+class App extends Component<AppProps, AppState> {
 
   constructor(props) {
     super(props);
     store.subscribe(() => console.log('getState', store.getState()));
-    authService.onAuthStateChanged(user => {
-      console.log(user);
-      store.dispatch(setUser(user));
-    });
-    setTimeout(() => {
-      this.appReady = true;
-      this.setState({...this.state});
-    }, 1000);
+    this.initAppAndAuth();
+    this.state = {
+      appReady : false
+    };
   }
 
-  appReady:boolean = false;
+
+  async initAppAndAuth(){
+    await authService.getRedirectResult();
+    let user = await authService.getAuthState();
+
+    store.dispatch(setUser(user));
+    this.setState({...this.state, appReady: true});
+  }
 
   renderAuth() {
     return <AuthLogin />;
@@ -39,7 +46,7 @@ class App extends Component<AppProps, any> {
   }
 
   render() {
-    if(!this.appReady){
+    if(!this.state.appReady){
       return (
         <div>loading...</div>
       );
@@ -47,15 +54,15 @@ class App extends Component<AppProps, any> {
     return (
       <div id="app-container">
         <Navbar></Navbar>
-        {this.props.currentUser ? this.renderAppBody(): this.renderAuth()}
+        {this.props.user ? this.renderAppBody(): this.renderAuth()}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: StoreState):AppProps => {
   return {
-    currentUser: state.user
+    user: state.user
   }
 }
 
