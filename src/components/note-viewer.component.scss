@@ -1,0 +1,8 @@
+.note-viewer-container{
+    .btn-deletenote{
+        cursor: pointer;
+        &.disabled{
+            cursor: not-allowed;
+        }
+    }
+}

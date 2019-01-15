@@ -2,7 +2,8 @@ import { ReduxAction, ActionTypes } from "./actions";
 import { combineReducers } from "redux";
 
 export interface StoreState {
-  user: firebase.User
+  user: firebase.User,
+  activeNoteID?: string
 }
 
 const initialState: StoreState = {
@@ -21,6 +22,19 @@ function userRdc(userState:firebase.User, action:ReduxAction<firebase.User>) {
   }
 }
 
+function activeNoteIDRdc(activeNoteIDState:string , action:ReduxAction<string>){
+  switch (action.type) {
+    case ActionTypes.SET_ACTIVE_NOTE:
+      return action.data;
+      break;
+  
+    default:
+      return activeNoteIDState || null; 
+      break;
+  }
+}
+
 export const combinedReducers = combineReducers({
-  user:userRdc
+  user:userRdc,
+  activeNoteID: activeNoteIDRdc
 });

@@ -2,19 +2,26 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import logo from './logo.svg';
 import './App.scss';
+import 'react-quill/dist/quill.snow.css'; // ES6
 import AuthLogin from './components/auth-login.component';
 import { authService } from './services/auth.service';
 import { StoreState } from './redux/reducers';
 import { store } from './redux';
-import { setUser } from './redux/actions';
+import { setUser, setActiveNote } from './redux/actions';
 import Navbar from './components/navbar.component';
+import NoteList from './components/note-list.component';
+import { INote } from './models/note.interface';
+import { NoteViewer } from './components/note-viewer.component';
+import { dbService } from './services/database.service';
 
 interface AppProps {
   user?: firebase.User;
 }
 
-interface AppState{
-  appReady: boolean
+interface AppState {
+  appReady: boolean,
+  selectedNote?: INote,
+  notes?: INote[]
 }
 
 class App extends Component<AppProps, AppState> {
@@ -24,17 +31,41 @@ class App extends Component<AppProps, AppState> {
     store.subscribe(() => console.log('getState', store.getState()));
     this.initAppAndAuth();
     this.state = {
-      appReady : false
+      appReady: false,
+      notes: []
     };
   }
 
-
-  async initAppAndAuth(){
+  async initAppAndAuth() {
     await authService.getRedirectResult();
     let user = await authService.getAuthState();
 
     store.dispatch(setUser(user));
-    this.setState({...this.state, appReady: true});
+    if(user){
+      await this.loadNotes();
+    }
+    this.setState({ ...this.state, appReady: true });
+  }
+
+  selectNote(note: INote) {
+    this.setState({...this.state, selectedNote: note});
+  }
+
+  handleNewNote(note:INote){
+    this.setState({...this.state, selectedNote: note});
+  }
+
+  async handleDeleteNote(note:INote){
+    let notesWithRemovedDeleted = this.state.notes.filter(noteItem=>noteItem.ID!=note.ID);
+    store.dispatch(setActiveNote(null));
+    this.setState({...this.state, selectedNote: null, notes: notesWithRemovedDeleted});
+    dbService.removeItem('notes', note);
+  }
+ 
+  async loadNotes(){
+    dbService.getCollection<INote>('notes', qry=>qry.where('UID','==',this.props.user.uid)).then(notes => {
+      this.setState({ ...this.state, notes: notes });
+    });
   }
 
   renderAuth() {
@@ -42,11 +73,22 @@ class App extends Component<AppProps, AppState> {
   }
 
   renderAppBody() {
-    return <div>hello world</div>
+    return (
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-lg-4">
+            <NoteList notes={this.state.notes} onAddNote={this.handleNewNote.bind(this)} onSelectNote={this.selectNote.bind(this)} ></NoteList>
+          </div>
+          <div className="col-lg-8">
+            <NoteViewer onClickDelete={e=>this.handleDeleteNote(e)} note={this.state.selectedNote} onTitleChange={e=>this.forceUpdate()} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   render() {
-    if(!this.state.appReady){
+    if (!this.state.appReady) {
       return (
         <div>loading...</div>
       );
@@ -54,13 +96,13 @@ class App extends Component<AppProps, AppState> {
     return (
       <div id="app-container">
         <Navbar></Navbar>
-        {this.props.user ? this.renderAppBody(): this.renderAuth()}
+        {this.props.user ? this.renderAppBody() : this.renderAuth()}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: StoreState):AppProps => {
+const mapStateToProps = (state: StoreState): AppProps => {
   return {
     user: state.user
   }

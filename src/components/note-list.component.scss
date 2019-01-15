@@ -1,0 +1,9 @@
+.note-list-container{
+    .rendered-notes{
+        max-height: calc(100vh - 171px);
+        overflow-y: auto;
+    }
+    .list-group-item-action{
+        cursor: pointer;
+    }
+}
