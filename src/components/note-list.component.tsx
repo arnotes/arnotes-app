@@ -103,7 +103,7 @@ class NoteList extends Component<NoteListProps, NoteListState> {
             <button key={note.ID}
                 type="button"
                 onClick={e => this.onClickNote(note)}
-                className={"list-group-item-action list-group-item " + (this.props.activeNoteID == note.ID && "active")}>
+                className={"list-group-item-action list-group-item " + (this.props.activeNoteID == note.ID && "active list-group-item-info")}>
                 {note.Title || '\u00A0' }
             </button>
         );
@@ -124,7 +124,7 @@ class NoteList extends Component<NoteListProps, NoteListState> {
                     <div className="rendered-notes" ref={this.renderedNotesRef as any}>
                         {this.filterResults().sort((a,b)=>a.Title.localeCompare(b.Title)).map(note => this.renderNote(note))}
                     </div>
-                    <button type="button" disabled={this.state.addNoteLoading} onClick={this.addNote.bind(this)} className="list-group-item list-group-item-info list-group-item-action">
+                    <button type="button" disabled={this.state.addNoteLoading} onClick={this.addNote.bind(this)} className="active list-group-item-success list-group-item list-group-item-action">
                         Add Note <i className="fas fa-plus-square"></i>
                     </button>
                 </ul>

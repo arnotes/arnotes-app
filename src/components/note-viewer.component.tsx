@@ -54,7 +54,7 @@ export class NoteViewer extends Component<NoteViewerProps> {
 	render() {
 		return (
 			<div className="note-viewer-container">
-				<div className="card bg-dark p-3">
+				<div className="card p-3">
 					<div className="input-group flex-nowrap">
 						<input value={this.props.note ? this.props.note.Title : ''}
 							onChange={e => this.changeTitle(e.target.value)}
