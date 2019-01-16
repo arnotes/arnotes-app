@@ -111,7 +111,7 @@ class NoteList extends Component<NoteListProps, NoteListState> {
 
     render() {
         return (
-            <div className="note-list-container">
+            <div className="card note-list-container">
                 <ul className="list-group">
                     <li className="list-group-item">
                         <div className="input-group flex-nowrap">
@@ -124,7 +124,9 @@ class NoteList extends Component<NoteListProps, NoteListState> {
                     <div className="rendered-notes" ref={this.renderedNotesRef as any}>
                         {this.filterResults().sort((a,b)=>a.Title.localeCompare(b.Title)).map(note => this.renderNote(note))}
                     </div>
-                    <button type="button" disabled={this.state.addNoteLoading} onClick={this.addNote.bind(this)} className="list-group-item list-group-item-primary list-group-item-action">Add Note +</button>
+                    <button type="button" disabled={this.state.addNoteLoading} onClick={this.addNote.bind(this)} className="list-group-item list-group-item-info list-group-item-action">
+                        Add Note <i className="fas fa-plus-square"></i>
+                    </button>
                 </ul>
             </div>
         )

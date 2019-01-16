@@ -1,6 +1,7 @@
 .note-list-container{
     .rendered-notes{
-        max-height: calc(100vh - 171px);
+        max-height: calc(100vh - 210px);
+        min-height: calc(100vh - 210px);
         overflow-y: auto;
     }
     .list-group-item-action{

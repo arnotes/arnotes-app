@@ -75,11 +75,12 @@ class App extends Component<AppProps, AppState> {
   renderAppBody() {
     return (
       <div className="container-fluid">
+        <br/>
         <div className="row">
-          <div className="col-lg-4">
+          <div className="col-xs-6 col-sm-5 col-md-4 col-lg-3">
             <NoteList notes={this.state.notes} onAddNote={this.handleNewNote.bind(this)} onSelectNote={this.selectNote.bind(this)} ></NoteList>
           </div>
-          <div className="col-lg-8">
+          <div className="col-xs-6 col-sm-7 col-md-8 col-lg-9">
             <NoteViewer onClickDelete={e=>this.handleDeleteNote(e)} note={this.state.selectedNote} onTitleChange={e=>this.forceUpdate()} />
           </div>
         </div>
