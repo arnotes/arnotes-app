@@ -5,7 +5,29 @@
             cursor: not-allowed;
         }
     }
-    .ql-container{
-        height: calc(100vh - 255px);
+    .quill{
+        .ql-container{
+            height: calc(100vh - 255px);
+        }
+        .ql-toolbar.ql-snow{
+            background-color: white;
+            .ql-header.ql-picker{
+                color: black;
+                .ql-picker-label{
+                    color: black;
+                }
+                svg > *{
+                    stroke: black;
+                }
+                &:hover:not(.ql-expanded){
+                    .ql-picker-label{
+                        color: #06c;
+                    }
+                    svg > *{
+                        stroke: #06c;
+                    }                    
+                }
+            }
+        }
     }
 }
