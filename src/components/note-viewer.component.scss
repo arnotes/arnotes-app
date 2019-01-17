@@ -10,7 +10,7 @@
         .quill{
             height: 100%;
             .ql-container{
-                //height: calc(100vh - 255px);
+                height: calc(100% - 42.13px);
             }
             .ql-toolbar.ql-snow{
                 background-color: white;
@@ -34,4 +34,16 @@
             }
         }
     }
+}
+
+@media(max-width:747px){
+    .note-viewer-container{
+        .react-quill-wrapper{
+            .quill{
+                .ql-container{
+                    height: calc(100% - 66.25px);
+                }
+            }
+        }
+    }    
 }
