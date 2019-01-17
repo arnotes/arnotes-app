@@ -51,6 +51,8 @@ export class NoteViewer extends Component<NoteViewerProps, NoteViewerState> {
 	private sbjNoteTitle = new Subject<string>();
 
 	changeTitle(title: string) {
+		let note = this.props.note;
+		note.Title = title;
 		this.setState({
 			...this.state,
 			txtTitle: title
@@ -63,7 +65,8 @@ export class NoteViewer extends Component<NoteViewerProps, NoteViewerState> {
 		if(source!=="user"){
 			return;
 		}
-
+		let note = this.props.note;
+		note.Body = content;
 		this.setState({
 			...this.state,
 			txtBody: content

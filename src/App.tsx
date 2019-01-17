@@ -146,7 +146,7 @@ class App extends Component<AppProps, AppState> {
     }
     return (
       <div id="app-container">
-        <Navbar></Navbar>
+        <Navbar/>
         {this.props.user ? this.renderAppBody() : this.renderAuth()}
       </div>
     );
