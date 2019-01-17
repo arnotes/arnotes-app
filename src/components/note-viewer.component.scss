@@ -1,4 +1,12 @@
 .note-viewer-container{
+    .save-progress{
+        position: relative;
+        top: -8px;
+        visibility: hidden;
+        &.show-progress{
+            visibility: visible;
+        }
+    }
     .btn-deletenote{
         cursor: pointer;
         &.disabled{
@@ -6,7 +14,7 @@
         }
     }
     .react-quill-wrapper{
-        height: calc(100vh - 211px);
+        height: calc(100vh - 221px);
         .quill{
             height: 100%;
             .ql-container{

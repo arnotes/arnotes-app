@@ -3,74 +3,103 @@ import ReactQuill from 'react-quill'; // Typescript
 import { Delta, Sources } from 'quill';
 import { INote } from '../models/note.interface';
 import { Subject } from 'rxjs';
-import { dbService } from '../services/database.service';
 import { debounceTime } from 'rxjs/operators';
 import './note-viewer.component.scss';
 
 interface NoteViewerProps {
+	showProgress?:boolean,
 	note?: INote,
 	onTitleChange?: (title: string) => any,
-	onClickDelete?: (note:INote)=>any
+	onTitleInput?: (title: string) => any,
+	onBodyChange?: (body: string) => any,
+	onBodyInput?: (body: string) => any,
+	onClickDelete?: (note: INote) => any
 }
 
-export class NoteViewer extends Component<NoteViewerProps> {
+interface NoteViewerState {
+	txtTitle?: string;
+	txtBody?: string;
+}
+
+export class NoteViewer extends Component<NoteViewerProps, NoteViewerState> {
 	constructor(props) {
 		super(props);
 
-		this.sbjNoteBody.pipe(debounceTime(500))
-			.subscribe(content => this.saveNoteBody(content));
+		this.sbjNoteTitle.pipe(debounceTime(500)).subscribe(content => {
+			this.props.onTitleChange && this.props.onTitleChange(content)
+		});
 
-		this.sbjNoteTitle.pipe(debounceTime(500))
-			.subscribe(content => this.saveNoteTitle(content));
+		this.sbjNoteBody.pipe(debounceTime(500)).subscribe(content => {
+			this.props.onBodyChange && this.props.onBodyChange(content)
+		});
+
+		this.state = {
+			txtTitle: this.props.note ? this.props.note.Title : '',
+			txtBody: this.props.note ? this.props.note.Body : ''
+		};
+	}
+
+	componentWillReceiveProps(nextProps: NoteViewerProps) {
+		this.setState({
+			...this.state,
+			txtTitle: nextProps.note ? nextProps.note.Title : '',
+			txtBody: nextProps.note ? nextProps.note.Body : ''
+		});
 	}
 
 	private sbjNoteBody = new Subject<string>();
 	private sbjNoteTitle = new Subject<string>();
 
-	async saveNoteBody(content: string) {
-		if(!this.props.note){
-			return;
-		}
-		this.props.note.Body = content;
-		await dbService.updateItem('notes', this.props.note);
-	}
-
-	async saveNoteTitle(title: string) {
-		this.props.note.Title = title;
-		await dbService.updateItem('notes', this.props.note);
+	changeTitle(title: string) {
+		this.setState({
+			...this.state,
+			txtTitle: title
+		});
+		this.props.onTitleInput && this.props.onTitleInput(title);
+		this.sbjNoteTitle.next(title);
 	}
 
 	onQuillChange(content: string, delta: Delta, source: Sources) {
-		this.sbjNoteBody.next(content);
-	}
+		if(source!=="user"){
+			return;
+		}
 
-	changeTitle(title: string) {
-		this.props.note.Title = title;
-		this.sbjNoteTitle.next(title);
-		this.props.onTitleChange && this.props.onTitleChange(title);
-		this.forceUpdate();
+		this.setState({
+			...this.state,
+			txtBody: content
+		});
+		this.props.onBodyInput && this.props.onBodyInput(content);
+		this.sbjNoteBody.next(content);
 	}
 
 	render() {
 		return (
 			<div className="note-viewer-container">
 				<div className="card p-3">
+					<div className={"progress save-progress "+(this.props.showProgress  && " show-progress")}>
+						<div className="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+							role="progressbar"  
+							style={({width: '100%'})} >
+						</div>
+					</div>				
 					<div className="input-group flex-nowrap">
-						<input value={this.props.note ? this.props.note.Title : ''}
+						<input value={this.state.txtTitle}
 							onChange={e => this.changeTitle(e.target.value)}
 							disabled={!this.props.note}
 							placeholder="Title..."
 							type="text"
 							className="form-control" />
 						<div className="input-group-append">
-							<span onClick={e=>this.props.onClickDelete && this.props.onClickDelete(this.props.note)} className={"input-group-text btn-deletenote "+ (this.props.note && "bg-danger" || "disabled")}>
-								<i className="fas fa-trash-alt" style={({color: 'white'})} ></i>
+							<span onClick={e => this.props.note && this.props.onClickDelete && this.props.onClickDelete(this.props.note)} className={"input-group-text btn-deletenote " + (this.props.note && "bg-danger" || "disabled")}>
+								<i className="fas fa-trash-alt" style={({ color: 'white' })} ></i>
 							</span>
-						</div>							
+						</div>
 					</div>
-					<br />
+					<br/>
 					<div className="react-quill-wrapper">
-						<ReactQuill readOnly={!this.props.note} value={this.props.note ? this.props.note.Body : ''} onChange={this.onQuillChange.bind(this)} />					
+						<ReactQuill readOnly={!this.props.note} 
+							value={this.state.txtBody} 
+							onChange={this.onQuillChange.bind(this)} />
 					</div>
 				</div>
 			</div>
