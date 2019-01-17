@@ -5,27 +5,31 @@
             cursor: not-allowed;
         }
     }
-    .quill{
-        .ql-container{
-            height: calc(100vh - 255px);
-        }
-        .ql-toolbar.ql-snow{
-            background-color: white;
-            .ql-header.ql-picker{
-                color: black;
-                .ql-picker-label{
+    .react-quill-wrapper{
+        height: calc(100vh - 211px);
+        .quill{
+            height: 100%;
+            .ql-container{
+                //height: calc(100vh - 255px);
+            }
+            .ql-toolbar.ql-snow{
+                background-color: white;
+                .ql-header.ql-picker{
                     color: black;
-                }
-                svg > *{
-                    stroke: black;
-                }
-                &:hover:not(.ql-expanded){
                     .ql-picker-label{
-                        color: #06c;
+                        color: black;
                     }
                     svg > *{
-                        stroke: #06c;
-                    }                    
+                        stroke: black;
+                    }
+                    &:hover:not(.ql-expanded){
+                        .ql-picker-label{
+                            color: #06c;
+                        }
+                        svg > *{
+                            stroke: #06c;
+                        }                    
+                    }
                 }
             }
         }

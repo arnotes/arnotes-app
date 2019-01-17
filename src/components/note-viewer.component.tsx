@@ -69,7 +69,9 @@ export class NoteViewer extends Component<NoteViewerProps> {
 						</div>							
 					</div>
 					<br />
-					<ReactQuill readOnly={!this.props.note} value={this.props.note ? this.props.note.Body : ''} onChange={this.onQuillChange.bind(this)} />
+					<div className="react-quill-wrapper">
+						<ReactQuill readOnly={!this.props.note} value={this.props.note ? this.props.note.Body : ''} onChange={this.onQuillChange.bind(this)} />					
+					</div>
 				</div>
 			</div>
 		)
