@@ -93,9 +93,12 @@ export class NoteViewer extends Component<NoteViewerProps, NoteViewerState> {
 							type="text"
 							className="form-control" />
 						<div className="input-group-append">
-							<span onClick={e => this.props.note && this.props.onClickDelete && this.props.onClickDelete(this.props.note)} className={"input-group-text btn-deletenote " + (this.props.note && "bg-danger" || "disabled")}>
-								<i className="fas fa-trash-alt" style={({ color: 'white' })} ></i>
-							</span>
+							<button onClick={e => this.props.note && this.props.onClickDelete && this.props.onClickDelete(this.props.note)}
+									type="button" 
+									className="btn btn-danger" 
+									disabled={!this.props.note}>
+								<i className="fas fa-trash-alt"></i>
+							</button>
 						</div>
 					</div>
 					<br/>
