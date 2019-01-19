@@ -1,6 +1,7 @@
 #app-container{
   max-height: 100vh;
   overflow: hidden;
+  flex: 1;
 }
 
 .App {
@@ -36,5 +37,15 @@
   }
 }
 
+#root{
+  height: 100%;
+}
 
-@import './components/auth-login.component.scss';
+.flex-h-box{
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-h-take{
+  flex: 1;
+}

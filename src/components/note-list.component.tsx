@@ -111,8 +111,8 @@ class NoteList extends Component<NoteListProps, NoteListState> {
 
     render() {
         return (
-            <div className="card note-list-container">
-                <ul className="list-group">
+            <div className="card note-list-container flex-h-take flex-h-box">
+                <ul className="list-group flex-h-take flex-h-box">
                     <li className="list-group-item">
                         <div className="input-group flex-nowrap">
                             <input onChange={this.onSearchChange}
@@ -121,7 +121,7 @@ class NoteList extends Component<NoteListProps, NoteListState> {
                                 placeholder="Search notes..." />
                         </div>
                     </li>
-                    <div className="rendered-notes" ref={this.renderedNotesRef as any}>
+                    <div className="rendered-notes flex-h-take" ref={this.renderedNotesRef as any}>
                         {this.filterResults().sort((a,b)=>a.Title.localeCompare(b.Title)).map(note => this.renderNote(note))}
                     </div>
                     <button type="button" disabled={this.state.addNoteLoading} onClick={this.addNote.bind(this)} className="active list-group-item-success list-group-item list-group-item-action">

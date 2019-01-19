@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { authService } from '../services/auth.service';
 import { setUser } from '../redux/actions';
+import './auth-login.component.scss';
 
 interface AuthLoginState{
   loginGoogleLoading:boolean

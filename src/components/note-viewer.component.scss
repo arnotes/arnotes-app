@@ -14,11 +14,14 @@
         }
     }
     .react-quill-wrapper{
-        height: calc(100vh - 221px);
         .quill{
-            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             .ql-container{
-                height: calc(100% - 42.13px);
+                flex: 1;
+                display: flex;
+                //flex-direction: column;
             }
             .ql-toolbar.ql-snow{
                 background-color: white;
@@ -42,16 +45,4 @@
             }
         }
     }
-}
-
-@media(max-width:747px){
-    .note-viewer-container{
-        .react-quill-wrapper{
-            .quill{
-                .ql-container{
-                    height: calc(100% - 66.25px);
-                }
-            }
-        }
-    }    
 }

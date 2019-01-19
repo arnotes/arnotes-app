@@ -77,8 +77,8 @@ export class NoteViewer extends Component<NoteViewerProps, NoteViewerState> {
 
 	render() {
 		return (
-			<div className="note-viewer-container">
-				<div className="card p-3">
+			<div className="note-viewer-container flex-h-take flex-h-box">
+				<div className="card p-3 flex-h-take flex-h-box">
 					<div className={"progress save-progress "+(this.props.showProgress  && " show-progress")}>
 						<div className="progress-bar progress-bar-striped progress-bar-animated bg-success" 
 							role="progressbar"  
@@ -102,7 +102,7 @@ export class NoteViewer extends Component<NoteViewerProps, NoteViewerState> {
 						</div>
 					</div>
 					<br/>
-					<div className="react-quill-wrapper">
+					<div className="react-quill-wrapper flex-h-take flex-h-box">
 						<ReactQuill readOnly={!this.props.note} 
 							value={this.state.txtBody} 
 							onChange={this.onQuillChange.bind(this)} />
