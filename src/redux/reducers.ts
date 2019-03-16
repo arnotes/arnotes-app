@@ -3,7 +3,8 @@ import { combineReducers } from "redux";
 
 export interface StoreState {
   user: firebase.User,
-  activeNoteID?: string
+  activeNoteID?: string,
+  searchInputFocused?: boolean
 }
 
 const initialState: StoreState = {
@@ -34,7 +35,20 @@ function activeNoteIDRdc(activeNoteIDState:string , action:ReduxAction<string>){
   }
 }
 
+function searchInputFocusedRdc(isFocused:boolean, action:ReduxAction<boolean>){
+  switch (action.type) {
+    case ActionTypes.SET_SEARCHINPUT_FOCUS_STATE:
+      return action.data
+      break;
+  
+    default:
+      return !!isFocused;
+      break;
+  }
+}
+
 export const combinedReducers = combineReducers({
   user:userRdc,
-  activeNoteID: activeNoteIDRdc
+  activeNoteID: activeNoteIDRdc,
+  searchInputFocused: searchInputFocusedRdc
 });

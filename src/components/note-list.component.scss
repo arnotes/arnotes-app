@@ -1,6 +1,7 @@
 .note-list-container{
     .rendered-notes{
         overflow-y: auto;
+        max-height: calc(100vh - 222px);
     }
     .list-group-item-action{
         cursor: pointer;

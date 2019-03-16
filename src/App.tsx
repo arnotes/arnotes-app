@@ -16,6 +16,7 @@ import { dbService } from './services/database.service';
 
 interface AppProps {
   user?: firebase.User;
+  searchInputFocused?: boolean;
 }
 
 interface AppState {
@@ -121,11 +122,11 @@ class App extends Component<AppProps, AppState> {
   renderAppBody() {
     return (
       <div className="container-fluid flex-h-take flex-h-box pt-4 pb-4">
-        <div className="row flex-h-take">
-          <div className="col-xs-6 col-sm-5 col-md-4 col-lg-3 flex-h-box">
+        <div className={"row flex-h-take "+(this.props.searchInputFocused && "search-input-focused" || "")}>
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 flex-h-box">
             <NoteList notes={this.state.notes} onAddNote={this.handleNewNote.bind(this)} onSelectNote={this.selectNote.bind(this)} ></NoteList>
           </div>
-          <div className="col-xs-6 col-sm-7 col-md-8 col-lg-9 flex-h-box">
+          <div className="col-xs-12 col-sm-12 col-md-8 col-lg-9 flex-h-box">
             <NoteViewer onClickDelete={e => this.handleDeleteNote(e)}
               onTitleChange={e => this.state.selectedNote && this.saveNoteTitle(e)}
               onBodyChange={e => this.state.selectedNote && this.saveNoteBody(e)}
@@ -154,7 +155,8 @@ class App extends Component<AppProps, AppState> {
 
 const mapStateToProps = (state: StoreState): AppProps => {
   return {
-    user: state.user
+    user: state.user,
+    searchInputFocused: state.searchInputFocused
   }
 }
 

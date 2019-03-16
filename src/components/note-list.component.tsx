@@ -7,7 +7,7 @@ import { INote } from '../models/note.interface';
 import { StoreState } from '../redux/reducers';
 import { connect } from 'react-redux';
 import { store } from '../redux';
-import { setActiveNote } from '../redux/actions';
+import { setActiveNote, setSearchInputFocusState } from '../redux/actions';
 import './note-list.component.scss';
 
 interface NoteListProps {
@@ -31,6 +31,7 @@ class NoteList extends Component<NoteListProps, NoteListState> {
         this.onSearchChange = this.onSearchChange.bind(this);
         this.filterResults = this.filterResults.bind(this);
         this.renderNote = this.renderNote.bind(this);
+        this.setSearchInputFocusState = this.setSearchInputFocusState.bind(this);
 
         this.state = {
             filterText: ""
@@ -109,6 +110,10 @@ class NoteList extends Component<NoteListProps, NoteListState> {
         );
     }
 
+    setSearchInputFocusState(isFocused:boolean){
+        store.dispatch(setSearchInputFocusState(isFocused));
+    }
+
     render() {
         return (
             <div className="card note-list-container flex-h-take flex-h-box">
@@ -116,6 +121,8 @@ class NoteList extends Component<NoteListProps, NoteListState> {
                     <li className="list-group-item">
                         <div className="input-group flex-nowrap">
                             <input onChange={this.onSearchChange}
+                                onFocus={()=>this.setSearchInputFocusState(true)}
+                                onBlur={()=>this.setSearchInputFocusState(false)}
                                 type="search"
                                 className="form-control"
                                 placeholder="Search notes..." />
